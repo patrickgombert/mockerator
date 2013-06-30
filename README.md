@@ -19,5 +19,4 @@ module.stop
 build takes two arguments, the first is an atom representing the Mock Module's name. The second is a list of tuples where each tuple defines {function name (as an atom), arity (number of arguments), response (the default response)}
 
 ## todo ##
-- Write tests
 - Playback arguments passed to the functions

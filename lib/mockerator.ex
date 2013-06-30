@@ -1,6 +1,6 @@
 defmodule Mockerator.Helper do
   def quoted_arguments(arity, name) do
-    {arguments, _ } = Enum.map_reduce(:lists.duplicate(arity, "x"), 0, fn(x, number) -> { {list_to_atom(integer_to_list(number)), [], name}, number + 1 } end)
+    {arguments, _} = Enum.map_reduce(:lists.duplicate(arity, "x"), 0, fn("x", number) -> { {list_to_atom(integer_to_list(number)), [], name}, number + 1 } end)
     arguments
   end
 
@@ -28,13 +28,17 @@ defmodule Mockerator do
             {:stop, :normal, state}
           end
 
-          Enum.each(calls, fn({function_name, arity, response}) ->
-            Module.eval_quoted(__MODULE__, {:def,[context: name],
-                                                 [{:handle_call,[],[{{function_name,[],name},Mockerator.Helper.quoted_arguments(arity, name)}, {:_info, [],name}, {:state,[],name}]},
-                                                 [do: {:"{}",[],[:reply,response,{:state,[],name}]}]]})
-            Module.eval_quoted(__MODULE__, {:def,[context: name],
-                                                 [{function_name,[],Mockerator.Helper.quoted_arguments(arity, name)},
-                                                 [do: Mockerator.Helper.gen_server_call(__MODULE__, function_name, arity)]]})
+          function_declarations = Enum.map(calls, fn({function_name, arity, response}) ->
+            {{:def,[context: name],
+                   [{:handle_call,[],[{function_name,Mockerator.Helper.quoted_arguments(arity, name)}, {:_info,[],name}, {:state,[],name}]},
+                   [do: {:"{}",[],[:reply,response,{:state,[],name}]}]]},
+             {:def,[context: name],
+                   [{function_name,[],Mockerator.Helper.quoted_arguments(arity, name)},
+                   [do: Mockerator.Helper.gen_server_call(__MODULE__, function_name, arity)]]}}
+          end)
+          Enum.each(function_declarations, fn({function, proc_function}) ->
+            Module.eval_quoted(__MODULE__, function)
+            Module.eval_quoted(__MODULE__, proc_function)
           end)
         end
       end
@@ -42,5 +46,3 @@ defmodule Mockerator do
     name
   end
 end
-
-# Mockerator.build(MyCoolMock, [{:test, 2, "my response"}])
