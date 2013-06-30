@@ -1,4 +1,8 @@
 defmodule Mockerator.Helper do
+  def gen_module_name do
+    list_to_atom(:uuid.to_string(:uuid.v4))
+  end
+
   def quoted_arguments(arity, name) do
     {arguments, _} = Enum.map_reduce(:lists.duplicate(arity, "x"), 0, fn("x", number) -> { {list_to_atom(integer_to_list(number)), [], name}, number + 1 } end)
     arguments
@@ -10,7 +14,8 @@ defmodule Mockerator.Helper do
 end
 
 defmodule Mockerator do
-  def build(name, calls) do
+  def build(calls) do
+    name = Mockerator.Helper.gen_module_name
     quote do
       unquote do
         defmodule name do
