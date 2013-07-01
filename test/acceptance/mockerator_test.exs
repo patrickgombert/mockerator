@@ -40,6 +40,14 @@ defmodule MockeratorTest do
     module.stop
   end
 
+  test "it handles bound variables" do
+    response = "response"
+    module = Mockerator.build([{:func, 0, response}])
+    module.start
+    assert module.func == response
+    module.stop
+  end
+
   test "it handles the README example" do
     module = Mockerator.build([{:first_function, 1, "my first response"},
                                {:first_function, 2, "my other first response"},
