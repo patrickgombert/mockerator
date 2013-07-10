@@ -10,8 +10,7 @@ defmodule Mockerator.Helper do
 end
 
 defmodule Mockerator do
-  def build(calls) do
-    name = Mockerator.Helper.gen_module_name
+  def build(name // Mockerator.Helper.gen_module_name, calls) do
     defmodule name do
       use GenServer.Behaviour
 
