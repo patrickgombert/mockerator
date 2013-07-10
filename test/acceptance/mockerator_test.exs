@@ -40,8 +40,8 @@ defmodule MockeratorTest do
     module.stop
   end
 
-  test "it handles bound variables" do
-    response = "response"
+  test "it handles tuple types" do
+    response = {:a, :b, :c}
     module = Mockerator.build([{:func, 0, response}])
     module.start
     assert module.func == response

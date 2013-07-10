@@ -28,4 +28,4 @@ Returned from build is a fully defined module with your mock functions and respo
 If your application adheres to the [Dependency Inversion Principle](http://en.wikipedia.org/wiki/Dependency_inversion_principle) then these mock modules can be used in place of calls you do not wish to actually execute in test (HTTP calls for example).
 
 ## TODO ##
-- Figure out why anonymous functions and tuples can not be used as a default response (they seem to be bound differently)
+- Figure out why anonymous functions can not be used as a default response

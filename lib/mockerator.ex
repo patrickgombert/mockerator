@@ -40,12 +40,13 @@ defmodule Mockerator do
       end
 
       function_declarations = Enum.map(calls, fn({function_name, arity, response}) ->
+        escaped_response = Macro.escape(response)
         { {:def,[context: name],
                 [{:handle_call,[],[{function_name,Mockerator.Helper.quoted_arguments(arity, name)}, {:_info,[],name}, {:state,[],name}]},
                 [do:
                   quote do
                     state = state ++ [{unquote(function_name), unquote(Mockerator.Helper.quoted_arguments(arity, name))}]
-                    {:reply, unquote(response), state}
+                    {:reply, unquote(escaped_response), state}
                   end]]},
           {:def,[context: name],
                 [{function_name,[],Mockerator.Helper.quoted_arguments(arity, name)},
