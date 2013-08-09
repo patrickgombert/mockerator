@@ -13,7 +13,7 @@ defmodule Mockerator.Mixfile do
 
   defp deps do
     [
-      { :uuid, %r(.*), github: "travis/erlang-uuid" }
+      { :uuid, github: "travis/erlang-uuid" }
     ]
   end
 end
