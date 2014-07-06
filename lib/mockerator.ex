@@ -1,18 +1,19 @@
 defmodule Mockerator.Helper do
   def gen_module_name do
-    list_to_atom(:uuid.to_string(:uuid.v4))
+    List.to_atom(:uuid.to_string(:uuid.v4))
   end
 
   def quoted_arguments(arity, name) do
-    {arguments, _} = Enum.map_reduce(:lists.duplicate(arity, "x"), 0, fn("x", number) -> { {list_to_atom(integer_to_list(number)), [], name}, number + 1 } end)
+    {arguments, _} = Enum.map_reduce(:lists.duplicate(arity, "x"), 0, fn("x", number) -> { { List.to_atom(Integer.to_char_list(number)), [], name }, number + 1 } end)
     arguments
   end
 end
 
 defmodule Mockerator do
-  def build(name // Mockerator.Helper.gen_module_name, calls) do
+  def build(calls) do
+    name = Mockerator.Helper.gen_module_name
     defmodule name do
-      use GenServer.Behaviour
+      use GenServer
 
       def start do
         :gen_server.start({:local, __MODULE__}, __MODULE__, [], [])

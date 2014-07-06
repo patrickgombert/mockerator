@@ -59,17 +59,4 @@ defmodule MockeratorTest do
     assert module.call_history == [first_function: [:arg], first_function: [:arg1, :arg2], second_function: []]
     module.stop
   end
-
-  test "it allows me to redefine modules" do
-    defmodule Test do
-      def fun do
-        :ok
-      end
-    end
-    assert Test.fun == :ok
-    Mockerator.build(Test, [{:fun, 0, :override}])
-    Test.start
-    assert Test.fun == :override
-    Test.stop
-  end
 end
